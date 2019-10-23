@@ -1,6 +1,9 @@
-describe.skip('About Functions', () => {
+describe('About Functions', () => {
   it('should declare function: add', () => {
-    expect(add(1, 2)).toEqual(__);
+    function add(a,b){
+      return a+b;
+    }
+    expect(add(1, 2)).toEqual(3);
   });
 
   it('should know internal variables override outer variables', () => {
@@ -15,9 +18,9 @@ describe.skip('About Functions', () => {
       return message;
     }
 
-    expect(getMessage()).toEqual(__);
-    expect(overrideMessage()).toEqual(__);
-    expect(message).toEqual(__);
+    expect(getMessage()).toEqual('Outer');
+    expect(overrideMessage()).toEqual('Inner');
+    expect(message).toEqual('Inner');
   });
 
   it('should have lexical scoping', () => {
@@ -29,7 +32,7 @@ describe.skip('About Functions', () => {
       }
       return childfunction();
     }
-    expect(parentfunction()).toEqual(__);
+    expect(parentfunction()).toEqual('local');
   });
 
   it('should use lexical scoping to synthesise functions', () => {
@@ -43,7 +46,7 @@ describe.skip('About Functions', () => {
     const mysteryFunction3 = makeMysteryFunction(3);
     const mysteryFunction5 = makeMysteryFunction(5);
 
-    expect(mysteryFunction3(10) + mysteryFunction5(5)).toEqual(__);
+    expect(mysteryFunction3(10) + mysteryFunction5(5)).toEqual(23);
   });
 
   it('should allow extra function arguments', () => {
@@ -51,17 +54,22 @@ describe.skip('About Functions', () => {
       return firstArg;
     }
 
-    expect(returnFirstArg('first', 'second', 'third')).toEqual(__);
+    expect(returnFirstArg('first', 'second', 'third')).toEqual('first');
 
     function returnSecondArg(firstArg, secondArg) {
       return secondArg;
     }
 
-    expect(returnSecondArg('arguments')).toEqual(__);
+    expect(returnSecondArg('arguments')).toEqual(undefined);
 
     // TODO: Fix the function to return all arguments. Hint: slice
-    function returnAllArgs() {}
+    function returnAllArgs() {
+      return Array.from(arguments);
+      //return Array.prototype.slice.call(arguments);
+      //return [].slice.call(arguments); 
+      //return [...arguments];
+    }
 
-    expect(returnAllArgs('first', 'second', 'third')).toEqual(__);
+    expect(returnAllArgs('first', 'second', 'third')).toEqual(["first", "second", "third"]);
   });
 });

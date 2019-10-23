@@ -1,4 +1,4 @@
-describe('var, let, const', () => {
+describe.skip('var, let, const', () => {
   describe('var...', () => {
     function iterator(bool) {
       if (bool) {
@@ -37,7 +37,7 @@ describe('var, let, const', () => {
       if (bool) {
         //here we are trying to reassign a const
         //TODO uncomment the line below to see the effect of const
-        /*name = "not hackages";*/
+        name = "not hackages";
       }
       return name;
     }

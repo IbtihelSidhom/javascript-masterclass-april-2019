@@ -2,8 +2,10 @@
 // You can find more information about arrow-function mdn by following the link below
 //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions
 
-describe.skip('Arrow function', () => {
-  describe.skip('Invoked through call or apply', () => {
+describe('Arrow function', () => {
+  describe('Invoked through call or apply', () => {
+    //Since arrow functions do not have their own this, 
+    //the methods call() and apply() can only pass in parameters. Any this argument is ignored.
     it('Should not bind this through call', () => {
       const person = {
         age: 1,
@@ -40,20 +42,20 @@ describe.skip('Arrow function', () => {
 
       let actual = person.add(1);
 
-      expect(actual).toEqual(__);
+      expect(actual).toEqual(2);
 
       actual = person.addThruCall(1);
 
-      expect(actual).toEqual(__);
+      expect(actual).toEqual(2);
 
       actual = person.addThruApply(1);
 
-      expect(actual).toEqual(__);
+      expect(actual).toEqual(2);
     });
   });
-  describe.skip('Used as methods', () => {
+  describe('Used as methods', () => {
     it('Should return undefined', () => {
-      const person = {
+      const person = { // does not create a new scope
         age: 10,
         getAge: function() {
           return this.age;
@@ -71,70 +73,75 @@ describe.skip('Arrow function', () => {
 
       let actual = person.getAge();
 
-      expect(actual).toEqual(__);
+      expect(actual).toEqual(10);
 
       actual = person.getAgeByArrow();
 
-      expect(actual).toEqual(__);
+      expect(actual).toEqual(undefined);
 
       actual = person.getAgeProperty;
 
-      expect(actual).toEqual(__);
+      expect(actual).toEqual(undefined);
+      // arrow function expressions are best suited for non-method functions.
     });
   });
 
-  describe.skip('No binding of this & arguments ', () => {
-    it("without its own 'this' context", (done) => {
-      function Person() {
-        this.age = 10;
+  describe('No binding of this & arguments ', () => {
+    // it("without its own 'this' context", (done) => {
+    //   function Person() {
+    //     this.age = 10;
 
-        setTimeout(function() {
-          this.age++;
-          expect(this.age).toEqual(11);
+    //     setTimeout(function() {
+    //       this.age++;
+    //       expect(this.age).toEqual(11);
 
-          done(); // done is function used by mocha to manage the async call
-        }, 0);
-      }
+    //       done(); // done is function used by mocha to manage the async call
+    //     }, 0);
+    //   }
 
-      new Person();
-    });
+    //   new Person();
+    // });
     describe("without its own 'argument' object ", () => {
+      //Arrow functions do not have their own arguments object. 
+      //Thus, in these examples, arguments is simply a reference to the arguments 
+      //of the enclosing scope.
       it('Should return the arguments variable', () => {
         function it() {
           return () => arguments[0];
         }
 
         let actual = it(42)();
-        expect(actual).toEqual(__);
+        expect(actual).toEqual(42);
       });
       it('Should override the argument object of foo()', () => {
         function foo(i) {
           const f = function() {
-            return arguments[0] + i;
+            return arguments[0] + i;  // 2 + 1
           };
           return f(2);
         }
 
         let actual = foo(1);
 
-        expect(actual).toEqual(__);
+        expect(actual).toEqual(3);
       });
       it('Should use the argument object of bar', () => {
         function bar(j) {
-          const f = (i) => arguments[0] + i;
+          const f = (i) => arguments[0] + i; // 1 + 2 
           return f(2);
         }
 
         let actual = bar(1);
 
-        expect(actual).toEqual(__);
+        expect(actual).toEqual(3);
       });
     });
   });
 
-  describe.skip('Add function...', () => {
+  describe('Add function...', () => {
     // TODO Implement the add function below to satisfy all the assertions below.
-    const add = function() {};
+    
+    const add = (...args) => [...args].reduce((a, b) => a + b, 0);
 
     it('Should return 5 when passing 2 and 3', () => {
       const actual = add(2, 3);
@@ -167,6 +174,7 @@ describe.skip('Arrow function', () => {
         owner: 'Davy',
         fruits: ['apple', 'banana'],
         printFruits: function() {
+          return this.fruits.map(element => this.owner + " bought " + element);
           // TODO Modify the function below to satisfy all the assertions below. '.bind' usage is forbidden
         },
       };
